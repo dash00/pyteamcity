@@ -257,6 +257,40 @@ class TeamCity:
         :param build_id: the build to get, in the format [0-9]+
         """
 
+    def get_tests(self, build='', test='', **kwargs):
+        """
+        Gets all build types in the TeamCity server pointed to by this instance
+        of the Client.
+        """
+        _get_locator_kwargs = {}
+        if build:
+            _get_locator_kwargs['build'] = build
+        if test:
+            _get_locator_kwargs['test'] = test
+
+        locator = self._get_locator(**_get_locator_kwargs)
+
+        if locator:
+            return self._get_all_tests_locator(
+                locator=locator,
+                **kwargs)
+        else:
+            return self._get_all_tests(**kwargs)
+
+    @GET('testOccurrences?locator={locator}')
+    def _get_all_tests_locator(self, locator=''):
+        """
+        Gets all tests in the TeamCity server pointed to by this instance
+        of the Client.
+        """
+
+    @GET('testOccurrences?')
+    def _get_all_tests(self):
+        """
+        Gets all tests in the TeamCity server pointed to by this instance
+        of the Client.
+        """
+
     @GET('changes?start={start}&count={count}')
     def get_all_changes(self, start=0, count=10):
         """
